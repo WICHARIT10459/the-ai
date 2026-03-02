@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semiconductor & Chip Market Trends</title>
+  <script src="chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 24px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: #76d9a0;
+    }
+    .subtitle {
+      text-align: center;
+      color: #8b949e;
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+      gap: 28px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card h2 {
+      font-size: 1.05rem;
+      color: #c9d1d9;
+      margin-bottom: 18px;
+      border-left: 3px solid #76d9a0;
+      padding-left: 10px;
+    }
+    canvas { width: 100% !important; }
+    .source {
+      text-align: center;
+      color: #484f58;
+      font-size: 0.78rem;
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📈 Semiconductor &amp; Chip Market Trends</h1>
+<p class="subtitle">Annual revenue, growth rates, market share, and market cap — 2019–2024</p>
+
+<div class="grid">
+
+  <!-- 1. Annual Revenue -->
+  <div class="card">
+    <h2>Annual Revenue (USD Billions) — Top Companies</h2>
+    <canvas id="revenueChart"></canvas>
+  </div>
+
+  <!-- 2. YoY Revenue Growth -->
+  <div class="card">
+    <h2>Year-over-Year Revenue Growth (%)</h2>
+    <canvas id="growthChart"></canvas>
+  </div>
+
+  <!-- 3. Market Share 2024 -->
+  <div class="card">
+    <h2>Global Semiconductor Market Share 2024 (Revenue-Based)</h2>
+    <canvas id="marketShareChart"></canvas>
+  </div>
+
+  <!-- 4. Market Cap -->
+  <div class="card">
+    <h2>Market Capitalisation (USD Billions) — Year-End</h2>
+    <canvas id="marketCapChart"></canvas>
+  </div>
+
+  <!-- 5. Global Semiconductor Market Size -->
+  <div class="card">
+    <h2>Global Semiconductor Industry Revenue (USD Billions)</h2>
+    <canvas id="industryChart"></canvas>
+  </div>
+
+  <!-- 6. AI Chip Segment -->
+  <div class="card">
+    <h2>AI / Data-Center GPU Segment — Nvidia Revenue (USD Billions)</h2>
+    <canvas id="aiChipChart"></canvas>
+  </div>
+
+</div>
+
+<p class="source">Sources: company annual reports, WSTS, IDC, SIA · Data shown is approximate/illustrative for trend analysis</p>
+
+<script>
+  const YEARS = ['2019', '2020', '2021', '2022', '2023', '2024'];
+
+  const COLORS = {
+    nvidia:   { border: '#76d9a0', bg: 'rgba(118,217,160,0.15)' },
+    amd:      { border: '#ff6e6e', bg: 'rgba(255,110,110,0.15)' },
+    intel:    { border: '#6fa8dc', bg: 'rgba(111,168,220,0.15)' },
+    tsmc:     { border: '#f6b26b', bg: 'rgba(246,178,107,0.15)' },
+    qualcomm: { border: '#c27ba0', bg: 'rgba(194,123,160,0.15)' },
+  };
+
+  const defaults = {
+    fill: true,
+    tension: 0.4,
+    pointRadius: 4,
+    pointHoverRadius: 6,
+    borderWidth: 2,
+  };
+
+  // ── 1. Revenue ──────────────────────────────────────────────────────────────
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+      labels: YEARS,
+      datasets: [
+        { ...defaults, label: 'Nvidia',   data: [10.92, 16.68, 26.91, 26.97, 44.87, 130.5], ...COLORS.nvidia },
+        { ...defaults, label: 'AMD',      data: [6.73, 9.76, 16.43, 23.60, 22.68, 25.79],  ...COLORS.amd },
+        { ...defaults, label: 'Intel',    data: [71.96, 77.87, 79.02, 63.05, 54.23, 53.10], ...COLORS.intel },
+        { ...defaults, label: 'TSMC',     data: [35.79, 45.51, 56.82, 75.88, 69.30, 90.10], ...COLORS.tsmc },
+        { ...defaults, label: 'Qualcomm', data: [24.27, 23.53, 33.57, 44.20, 35.82, 38.96], ...COLORS.qualcomm },
+      ],
+    },
+    options: chartOptions('Revenue (USD B)'),
+  });
+
+  // ── 2. YoY Growth ───────────────────────────────────────────────────────────
+  new Chart(document.getElementById('growthChart'), {
+    type: 'bar',
+    data: {
+      labels: ['2020', '2021', '2022', '2023', '2024'],
+      datasets: [
+        { label: 'Nvidia',   data: [52.7, 61.3, 0.2, 66.4, 190.9], backgroundColor: COLORS.nvidia.border },
+        { label: 'AMD',      data: [45.0, 68.3, 43.6, -3.9, 13.7],  backgroundColor: COLORS.amd.border },
+        { label: 'Intel',    data: [8.2, 1.5, -20.2, -14.0, -2.1],  backgroundColor: COLORS.intel.border },
+        { label: 'TSMC',     data: [27.2, 24.9, 33.5, -8.7, 30.0],  backgroundColor: COLORS.tsmc.border },
+        { label: 'Qualcomm', data: [-3.1, 42.7, 31.7, -19.0, 8.8],  backgroundColor: COLORS.qualcomm.border },
+      ],
+    },
+    options: chartOptions('Growth (%)', false),
+  });
+
+  // ── 3. Market Share (Donut) ─────────────────────────────────────────────────
+  new Chart(document.getElementById('marketShareChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Nvidia', 'Intel', 'TSMC*', 'Qualcomm', 'Samsung Semi', 'AMD', 'Broadcom', 'Others'],
+      datasets: [{
+        data: [20.5, 8.3, 14.1, 6.1, 9.2, 4.0, 4.8, 33.0],
+        backgroundColor: [
+          '#76d9a0','#6fa8dc','#f6b26b','#c27ba0',
+          '#ffd966','#ff6e6e','#8e7cc3','#444d56',
+        ],
+        borderColor: '#161b22',
+        borderWidth: 3,
+        hoverOffset: 14,
+      }],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#c9d1d9', font: { size: 12 } } },
+        tooltip: {
+          callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` },
+        },
+      },
+    },
+  });
+
+  // ── 4. Market Cap ───────────────────────────────────────────────────────────
+  new Chart(document.getElementById('marketCapChart'), {
+    type: 'line',
+    data: {
+      labels: YEARS,
+      datasets: [
+        { ...defaults, label: 'Nvidia',   data: [144, 323, 735, 360, 1220, 3300], ...COLORS.nvidia },
+        { ...defaults, label: 'AMD',      data: [33, 96, 190, 97, 177, 212],      ...COLORS.amd },
+        { ...defaults, label: 'Intel',    data: [237, 204, 208, 113, 176, 90],    ...COLORS.intel },
+        { ...defaults, label: 'TSMC',     data: [264, 530, 625, 410, 490, 880],   ...COLORS.tsmc },
+        { ...defaults, label: 'Qualcomm', data: [91, 155, 170, 111, 155, 165],    ...COLORS.qualcomm },
+      ],
+    },
+    options: chartOptions('Market Cap (USD B)'),
+  });
+
+  // ── 5. Global Industry Revenue ──────────────────────────────────────────────
+  new Chart(document.getElementById('industryChart'), {
+    type: 'bar',
+    data: {
+      labels: YEARS,
+      datasets: [{
+        label: 'Global Semiconductor Revenue',
+        data: [412, 440, 556, 601, 527, 627],
+        backgroundColor: 'rgba(118,217,160,0.6)',
+        borderColor: '#76d9a0',
+        borderWidth: 2,
+        borderRadius: 6,
+      }],
+    },
+    options: {
+      ...chartOptions('Revenue (USD B)', false),
+      plugins: {
+        legend: { labels: { color: '#c9d1d9' } },
+        tooltip: { mode: 'index', intersect: false },
+      },
+    },
+  });
+
+  // ── 6. Nvidia AI/DC Segment ─────────────────────────────────────────────────
+  new Chart(document.getElementById('aiChipChart'), {
+    type: 'bar',
+    data: {
+      labels: YEARS,
+      datasets: [
+        {
+          label: 'Data Center Revenue',
+          data: [2.98, 6.70, 10.61, 15.05, 47.53, 115.2],
+          backgroundColor: 'rgba(118,217,160,0.7)',
+          borderColor: '#76d9a0',
+          borderWidth: 2,
+          borderRadius: 6,
+          order: 2,
+        },
+        {
+          label: 'Total Nvidia Revenue',
+          data: [10.92, 16.68, 26.91, 26.97, 44.87, 130.5],
+          type: 'line',
+          ...defaults,
+          fill: false,
+          borderColor: '#f6b26b',
+          backgroundColor: 'transparent',
+          pointBackgroundColor: '#f6b26b',
+          order: 1,
+        },
+      ],
+    },
+    options: {
+      ...chartOptions('Revenue (USD B)', false),
+      plugins: {
+        legend: { labels: { color: '#c9d1d9' } },
+        tooltip: { mode: 'index', intersect: false },
+      },
+    },
+  });
+
+  // ── Shared chart options helper ─────────────────────────────────────────────
+  function chartOptions(yLabel, fillArea = true) {
+    return {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#c9d1d9', font: { size: 12 } } },
+        tooltip: { backgroundColor: '#1c2128', titleColor: '#e6edf3', bodyColor: '#8b949e' },
+      },
+      scales: {
+        x: {
+          ticks: { color: '#8b949e' },
+          grid: { color: '#21262d' },
+        },
+        y: {
+          ticks: { color: '#8b949e' },
+          grid: { color: '#21262d' },
+          title: { display: true, text: yLabel, color: '#8b949e' },
+        },
+      },
+    };
+  }
+</script>
+</body>
+</html>
