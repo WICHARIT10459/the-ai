@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semiconductor &amp; Chip Market Trends</title>
+  <script src="chart.umd.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      padding: 24px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: #76b900; /* NVIDIA green */
+    }
+
+    header p {
+      color: #aaa;
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
+      gap: 28px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .card h2 {
+      font-size: 1.05rem;
+      color: #c0c8d8;
+      margin-bottom: 18px;
+    }
+
+    canvas { width: 100% !important; }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #555;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🖥️ Semiconductor &amp; Chip Market Trends</h1>
+  <p>Global market data including NVIDIA, Intel, AMD, TSMC, Qualcomm &amp; Samsung</p>
+</header>
+
+<div class="grid">
+
+  <!-- Chart 1: Global Semiconductor Revenue -->
+  <div class="card">
+    <h2>📈 Global Semiconductor Market Revenue (USD Billion)</h2>
+    <canvas id="globalRevenue"></canvas>
+  </div>
+
+  <!-- Chart 2: NVIDIA Annual Revenue -->
+  <div class="card">
+    <h2>🟢 NVIDIA Annual Revenue (USD Billion, FY ending Jan)</h2>
+    <canvas id="nvidiaRevenue"></canvas>
+  </div>
+
+  <!-- Chart 3: Top-5 Chip Company Revenue Comparison (2023) -->
+  <div class="card">
+    <h2>🏆 Top Chip Companies – 2023 Revenue (USD Billion)</h2>
+    <canvas id="companyBar"></canvas>
+  </div>
+
+  <!-- Chart 4: NVIDIA Market Cap Milestones -->
+  <div class="card">
+    <h2>💹 NVIDIA Market Capitalisation Milestones (USD Trillion)</h2>
+    <canvas id="nvidiaCap"></canvas>
+  </div>
+
+  <!-- Chart 5: Semiconductor Market Share by Segment (2023) -->
+  <div class="card">
+    <h2>🍩 Semiconductor Market Share by Segment (2023)</h2>
+    <canvas id="segmentPie"></canvas>
+  </div>
+
+  <!-- Chart 6: AI Chip Market Growth Forecast -->
+  <div class="card">
+    <h2>🤖 AI Chip Market Size Forecast (USD Billion)</h2>
+    <canvas id="aiChip"></canvas>
+  </div>
+
+</div>
+
+<footer>
+  Data sources: SIA, WSTS, company annual reports, IDC, Gartner (figures are rounded / representative).
+</footer>
+
+<script>
+  // ── Shared palette ──────────────────────────────────────────────────
+  const green  = '#76b900';
+  const blue   = '#00a8e0';
+  const orange = '#f5a623';
+  const purple = '#a78bfa';
+  const red    = '#ef4444';
+  const teal   = '#2dd4bf';
+  const gridColor = 'rgba(255,255,255,0.06)';
+
+  Chart.defaults.color = '#aaa';
+  Chart.defaults.borderColor = gridColor;
+
+  // ── 1. Global Semiconductor Revenue ─────────────────────────────────
+  new Chart(document.getElementById('globalRevenue'), {
+    type: 'line',
+    data: {
+      labels: ['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024E'],
+      datasets: [{
+        label: 'Global Revenue ($B)',
+        data: [305, 336, 335, 339, 412, 469, 412, 440, 556, 574, 527, 588],
+        borderColor: blue,
+        backgroundColor: 'rgba(0,168,224,0.12)',
+        tension: 0.35,
+        fill: true,
+        pointRadius: 4,
+        pointBackgroundColor: blue,
+      }]
+    },
+    options: chartOpts('USD Billion')
+  });
+
+  // ── 2. NVIDIA Annual Revenue ─────────────────────────────────────────
+  new Chart(document.getElementById('nvidiaRevenue'), {
+    type: 'bar',
+    data: {
+      labels: ['FY2016','FY2017','FY2018','FY2019','FY2020','FY2021','FY2022','FY2023','FY2024','FY2025E'],
+      datasets: [{
+        label: 'NVIDIA Revenue ($B)',
+        data: [5.0, 6.9, 9.7, 11.7, 10.9, 16.7, 26.9, 26.9, 60.9, 130.0],
+        backgroundColor: [
+          green, green, green, green, green, green, green, green,
+          '#a8e063', '#c6f135'
+        ],
+        borderRadius: 5,
+      }]
+    },
+    options: chartOpts('USD Billion')
+  });
+
+  // ── 3. Company Revenue Comparison 2023 ──────────────────────────────
+  new Chart(document.getElementById('companyBar'), {
+    type: 'bar',
+    data: {
+      labels: ['Samsung Semi.', 'Intel', 'TSMC', 'SK Hynix', 'Qualcomm', 'NVIDIA', 'AMD', 'Micron', 'Broadcom', 'TI'],
+      datasets: [{
+        label: '2023 Revenue ($B)',
+        data: [57.3, 54.2, 69.0, 13.0, 35.8, 60.9, 22.7, 15.5, 35.8, 17.5],
+        backgroundColor: [orange, blue, teal, purple, red, green, '#f59e0b', '#60a5fa', '#c084fc', '#fb923c'],
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      ...chartOpts('USD Billion'),
+      indexAxis: 'y',
+    }
+  });
+
+  // ── 4. NVIDIA Market Cap Milestones ──────────────────────────────────
+  new Chart(document.getElementById('nvidiaCap'), {
+    type: 'line',
+    data: {
+      labels: ['Jan 2019','Jan 2020','Jan 2021','Jan 2022','Jan 2023','Jun 2023','Jan 2024','Jun 2024','Jan 2025'],
+      datasets: [{
+        label: 'Market Cap ($T)',
+        data: [0.08, 0.14, 0.33, 0.62, 0.36, 1.03, 1.22, 3.01, 3.30],
+        borderColor: green,
+        backgroundColor: 'rgba(118,185,0,0.12)',
+        tension: 0.35,
+        fill: true,
+        pointRadius: 5,
+        pointBackgroundColor: green,
+      }]
+    },
+    options: chartOpts('USD Trillion')
+  });
+
+  // ── 5. Segment Pie ───────────────────────────────────────────────────
+  new Chart(document.getElementById('segmentPie'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Logic/CPU/GPU', 'Memory (DRAM)', 'NAND Flash', 'Analog', 'Foundry Services', 'Other'],
+      datasets: [{
+        data: [32, 18, 14, 12, 14, 10],
+        backgroundColor: [blue, green, orange, purple, teal, '#94a3b8'],
+        borderColor: '#0f1117',
+        borderWidth: 3,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { position: 'right', labels: { padding: 16, boxWidth: 14 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
+      },
+      cutout: '60%',
+    }
+  });
+
+  // ── 6. AI Chip Market Forecast ───────────────────────────────────────
+  new Chart(document.getElementById('aiChip'), {
+    type: 'line',
+    data: {
+      labels: ['2020','2021','2022','2023','2024E','2025E','2026E','2027E','2028E','2030E'],
+      datasets: [
+        {
+          label: 'AI Chip Market ($B)',
+          data: [15, 22, 36, 67, 119, 180, 248, 330, 420, 620],
+          borderColor: orange,
+          backgroundColor: 'rgba(245,166,35,0.12)',
+          tension: 0.35,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: orange,
+        },
+        {
+          label: 'NVIDIA AI/Data-Centre Revenue ($B)',
+          data: [0.7, 2.0, 3.8, 18.4, 47.5, 75, 100, 135, 175, null],
+          borderColor: green,
+          backgroundColor: 'rgba(118,185,0,0.10)',
+          tension: 0.35,
+          fill: false,
+          pointRadius: 4,
+          pointBackgroundColor: green,
+          borderDash: [6, 3],
+        }
+      ]
+    },
+    options: chartOpts('USD Billion')
+  });
+
+  // ── Helper ───────────────────────────────────────────────────────────
+  function chartOpts(yLabel) {
+    return {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { boxWidth: 14 } },
+        tooltip: { backgroundColor: '#1e2130', borderColor: '#333', borderWidth: 1 }
+      },
+      scales: {
+        x: { grid: { color: gridColor } },
+        y: {
+          grid: { color: gridColor },
+          title: { display: true, text: yLabel, color: '#888' }
+        }
+      }
+    };
+  }
+</script>
+</body>
+</html>
